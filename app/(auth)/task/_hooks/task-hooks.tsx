@@ -3,12 +3,13 @@ import api from "@/lib/axios";
 import { toast } from "react-hot-toast";
 import { Task, TaskPagination } from "@/types/task-types";
 
-export const useGetTask = ({ page, limit, search, status, priority }: { page: number; limit: number, search?:string, status?: string, priority?: string }) => {
+export const useGetTask = ({ page, limit, search, status, priority }: { page: number; limit: number, search?: string, status?: string, priority?: string }) => {
     return useQuery<TaskPagination>({
         queryKey: ['Tasks', page, limit, search, status, priority],
         queryFn: () => getAllTasks(page, limit, search, status, priority),
     })
 };
+
 export const useGetAllTask = () => {
     return useQuery<Task[]>({
         queryKey: ['Tasks'],

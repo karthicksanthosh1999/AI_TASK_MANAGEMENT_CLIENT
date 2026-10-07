@@ -33,7 +33,6 @@ import { SessionProvider } from '@/providers/SessionProvider';
 function layout({children} : {children: ReactNode}) {
   return (
     <SessionProvider>
-        <AuthProvider>
         <SidebarProvider>
           <AppSidebar />
           <SidebarInset>
@@ -76,7 +75,6 @@ function layout({children} : {children: ReactNode}) {
             </div>
           </SidebarInset>
         </SidebarProvider>
-        </AuthProvider>
     </SessionProvider>
   )
 }

@@ -11,7 +11,8 @@ import { taskColumns } from "../../task/_components/task-column";
 const RecentTasks = () => {
   const [search, setSearch] = useState("")
 
-   const debounceSearch = useDebounce(search, 500)
+  const debounceSearch = useDebounce(search, 500);
+
   const [pagination, setPagination] = useState({
     page: 1,
     limit: 10,
@@ -21,7 +22,7 @@ const RecentTasks = () => {
   const { data, isLoading } = useGetTask({
     page: pagination.page,
     limit: pagination.limit,
-    search: debounceSearch!,
+    search: debounceSearch ?? "",
     status: pagination.status,
     priority: pagination.priority
   })
@@ -38,16 +39,15 @@ const RecentTasks = () => {
   },[])
 
   const handleLimitChange = useCallback((limit: number) => {
-    setPagination({ page: 1, limit, priority, status})
-  },[])
+    setPagination((prev) => ({
+      ...prev, page: 1, limit
+    }));
+  }, []);
 
   const handleEdit = useCallback((task: Task) => {
-    console.log('Editing task:', task);
     setIsOpen(true);
-    if(task){
-      setSelectedTask(task);
-    }
-  },[])
+    setSelectedTask(task);
+  },[]);
 
   return (
     <div className="space-y-2">

@@ -78,6 +78,7 @@ const createProject = async (ProjectDate: Project): Promise<void> => {
         throw error;
     }
 };
+
 const getAllProjects = async (): Promise<Project[]> => {
     try{
         const response = await api.post('/api/project/allProjects');

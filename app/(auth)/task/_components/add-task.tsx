@@ -35,8 +35,6 @@ const AddTask = ({ modelOpen, modelClose, selectedTask, setSelectedTask }: AddTa
     const { data: ProjectNames} = useGetProjectsName()
     const { user } = useSession();
 
-    console.log("User Error", error)
-
     const {
       register,
       handleSubmit,
@@ -102,7 +100,6 @@ const AddTask = ({ modelOpen, modelClose, selectedTask, setSelectedTask }: AddTa
       createTaskMutation({...values, startDate: new Date(values.startDate), endDate: new Date(values.endDate), userId: user?.id ?? ""})
       setSelectedTask(null);
     }
-  
     reset()
     modelClose()
   } 

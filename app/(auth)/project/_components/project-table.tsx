@@ -11,16 +11,19 @@ import { useDebounce } from "@/hooks/use-debounce";
 const ProjectTable = () => {
   const [search, setSearch] = useState("")
 
-   const debounceSearch = useDebounce(search, 500)
+  const debounceSearch = useDebounce(search, 500)
+
   const [pagination, setPagination] = useState({
     page: 1,
     limit: 10,
-  })
+  });
+
   const { data, isLoading } = useGetProjects({
     page: pagination.page,
     limit: pagination.limit,
-    search: debounceSearch!,
-  })
+    search: debounceSearch ?? "",
+  });
+  
   const { mutate: deleteProjectMutation } = useDeleteProjectMutation();
   const [selectedProject, setSelectedProject] = useState<Project | null>(null);
 
@@ -34,15 +37,16 @@ const ProjectTable = () => {
   },[])
 
   const handleLimitChange = useCallback((limit: number) => {
-    setPagination({ page: 1, limit})
-  },[])
+    setPagination((prev) => ({
+      ...prev,
+      page: 1,
+      limit,
+    }));
+  }, []);
 
   const handleEdit = useCallback((project: Project) => {
-    console.log('Editing project:', project);
     setIsOpen(true);
-    if(project){
-      setSelectedProject(project);
-    }
+    setSelectedProject(project);
   },[])
 
   return (

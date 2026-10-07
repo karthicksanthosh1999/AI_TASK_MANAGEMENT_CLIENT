@@ -34,7 +34,7 @@ interface DataTableProps<TData extends RowData> {
   onPageChange: (page: number) => void
   onLimitChange: (limit: number) => void
   onConfirmDelete?: (id: string) => void
-  onEdit?: (item: TData | null) => void
+  onEdit?: (item: TData) => void
   height?: string
 }
 

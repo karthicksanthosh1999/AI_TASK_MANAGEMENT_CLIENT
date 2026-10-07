@@ -3,6 +3,7 @@ import { Poppins } from "next/font/google";
 import "./globals.css";
 import { ThemeProvider } from "@/components/theme-provider";
 import { Toaster } from "react-hot-toast";
+import AuthProvider from "@/providers/AuthProvider";
 
 const poppins = Poppins({
   subsets: ["latin"],
@@ -22,15 +23,17 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
       className={`${poppins.variable} h-full antialiased`}
     >
       <body className="min-h-full flex flex-col">
+       <AuthProvider>
           <ThemeProvider
             attribute="class"
             defaultTheme="system"
             enableSystem
             disableTransitionOnChange
-          >
+            >
             {children}
             <Toaster position="top-right" />
           </ThemeProvider>    
+        </AuthProvider>
         </body>
     </html>
   );

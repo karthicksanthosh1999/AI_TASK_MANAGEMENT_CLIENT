@@ -2,78 +2,113 @@
 
 import api from "@/lib/axios";
 import { useRouter } from "next/navigation";
-import { createContext, ReactNode, useContext, useEffect, useState } from "react";
+import {
+  createContext,
+  ReactNode,
+  useContext,
+  useEffect,
+  useState,
+} from "react";
 import { toast } from "react-hot-toast";
 
 export interface User {
-    id: string;
-    name: string;
-    email: string;
-    mobileNo: string;
-    role: string;
-    createdAt: string;
-    image?: string;
+  id: string;
+  name: string;
+  email: string;
+  mobileNo: string;
+  role: string;
+  createdAt: string;
+  image?: string;
 }
 
 interface SessionContextType {
-    user: User | null;
-    loading: boolean;
-    isAuthenticated: boolean;
-    refetchUser: ()=> Promise<void>;
-    logOut: () => Promise<void>
+  user: User | null;
+  loading: boolean;
+  isAuthenticated: boolean;
+  logOut: () => Promise<void>;
 }
 
-export const SessionContext = createContext<SessionContextType | undefined>(undefined);
+export const SessionContext =
+  createContext<SessionContextType | undefined>(
+    undefined
+  );
 
-export const SessionProvider = ({children} : {children : ReactNode}) => {
+export const SessionProvider = ({
+  children,
+}: {
+  children: ReactNode;
+}) => {
+  const { push } = useRouter();
 
-    const { push } = useRouter();
+  const [user, setUser] = useState<User | null>(null);
+  const [loading, setLoading] = useState(true);
 
-    const [user, setUser] = useState<User | null>(null);
-    const [loading, setLoading] = useState(false);
+  useEffect(() => {
+    let ignore = false;
 
-    const fetchLoggedUser = async() => {
-        try {
-            setLoading(true)
-            const response = await api.get("/api/auth/me");
-            setUser(response?.data?.data)
-        } catch (error) {
-            setUser(null)
-            push("/")
-            toast.success("Login Session Expired, Please Login Again")
-            console.log(error)
-        }finally{
-            setLoading(false)
+    const fetchLoggedUser = async () => {
+      try {
+        const response = await api.get("/api/auth/me");
+
+        if (!ignore) {
+          setUser(response?.data?.data ?? null);
         }
+      } catch (error) {
+        if (!ignore) {
+          setUser(null);
+        }
+
+        console.log("Session check failed:", error);
+      } finally {
+        if (!ignore) {
+          setLoading(false);
+        }
+      }
     };
 
-    const logOut = async() => {
-        try {
-            await api.post("/api/auth/logout");
-            setUser(null)
-            push("/")
-            toast.success("User Logout Successfully")
-        } catch (error) {
-            setUser(null)
-            console.log(error)
-        }
+    fetchLoggedUser();
+
+    return () => {
+      ignore = true;
     };
+  }, []);
 
-    useEffect(()=>{
-        fetchLoggedUser();
-    },[])
+  const logOut = async () => {
+    try {
+      await api.post("/api/auth/logout");
 
-    return (
-        <SessionContext.Provider  value={{ user, isAuthenticated: !!user, loading, refetchUser: fetchLoggedUser, logOut: logOut }}>
-            {children}
-        </SessionContext.Provider>
-    )
-}
+      setUser(null);
+
+      toast.success("User Logout Successfully");
+
+      push("/");
+    } catch (error) {
+      console.log("Logout failed:", error);
+    }
+  };
+
+  return (
+    <SessionContext.Provider
+      value={{
+        user,
+        isAuthenticated: !!user,
+        loading,
+        logOut,
+      }}
+    >
+      {children}
+    </SessionContext.Provider>
+  );
+};
 
 export const useSession = () => {
-    const session = useContext(SessionContext);
-    if(!session) {
-        throw new Error("useSession must be used inside SessionProvider")
-    };
-    return session;
-}
+  const session = useContext(SessionContext);
+
+  if (!session) {
+    throw new Error(
+      "useSession must be used inside SessionProvider"
+    );
+  }
+
+  return session;
+};
