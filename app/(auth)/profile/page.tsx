@@ -313,34 +313,6 @@ function UserProfile() {
                   </div>
 
                   <div className="space-y-2">
-                    <Label htmlFor="lastName">
-                      Last Name
-                    </Label>
-
-                    {isEditing ? (
-                      <Input
-                        id="lastName"
-                        value={formData.lastName}
-                        onChange={(e) =>
-                          handleChange(
-                            "lastName",
-                            e.target.value
-                          )
-                        }
-                      />
-                    ) : (
-                      <div className="flex h-10 items-center rounded-md border bg-muted/30 px-3 text-sm">
-                        {user.lastName}
-                      </div>
-                    )}
-                  </div>
-
-                </div>
-
-                {/* Email / Phone */}
-                <div className="grid gap-5 sm:grid-cols-2">
-
-                  <div className="space-y-2">
                     <Label htmlFor="email">
                       Email Address
                     </Label>
@@ -362,6 +334,19 @@ function UserProfile() {
                         {user.email}
                       </div>
                     )}
+                  </div>
+
+                </div>
+
+                {/* Email / Phone */}
+                <div className="grid gap-5 sm:grid-cols-2">
+
+                  <div className="space-y-2">
+                    <Label>Role</Label>
+
+                    <div className="flex h-10 items-center rounded-md border bg-muted/50 px-3 text-sm">
+                      {user.role}
+                    </div>
                   </div>
 
                   <div className="space-y-2">
@@ -388,28 +373,6 @@ function UserProfile() {
                   </div>
 
                 </div>
-
-                {/* Role / Department */}
-                <div className="grid gap-5 sm:grid-cols-2">
-
-                  <div className="space-y-2">
-                    <Label>Role</Label>
-
-                    <div className="flex h-10 items-center rounded-md border bg-muted/50 px-3 text-sm">
-                      {user.role}
-                    </div>
-                  </div>
-
-                  <div className="space-y-2">
-                    <Label>Department</Label>
-
-                    <div className="flex h-10 items-center rounded-md border bg-muted/50 px-3 text-sm">
-                      {user.department}
-                    </div>
-                  </div>
-
-                </div>
-
               </CardContent>
             </Card>
 

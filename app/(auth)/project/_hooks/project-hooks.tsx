@@ -117,7 +117,6 @@ const getProjectsName = async (): Promise<{projectName: string, id: string}[]> =
         return response.data.data;
     }catch(error) {
         console.error('Error updating project:', error);
-        toast.error('Failed to fetch project', { id: 'fetch-project-error' });
         throw error;
     }
 };

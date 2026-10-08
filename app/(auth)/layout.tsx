@@ -44,7 +44,7 @@ function layout({children} : {children: ReactNode}) {
                   className="mr-2 data-vertical:h-4 data-vertical:self-auto"
                 />
                 <div className="flex w-full justify-between items-center uppercase">
-                  <h1>Welcome back!</h1>
+                  <h1 className="font-semibold">Welcome back!</h1>
                   <DropdownMenu>
                     <DropdownMenuTrigger render={<Button variant="ghost" size="icon" className="rounded-full cursor-pointer"><Avatar>
                         <AvatarImage src="https://github.com/shadcn.png" alt="shadcn" />
