@@ -5,6 +5,9 @@ import { Badge } from "@/components/ui/badge";
 import { formatDateTime } from "@/lib/dateFormater";
 import { Task } from "@/types/task-types";
 import { createColumnHelper } from "@tanstack/react-table";
+import { Button } from "@/components/ui/button";
+import { CheckCircle } from "lucide-react";
+import { useUpdateTaskStatusMutation } from "../_hooks/task-hooks";
 
 // Use `accessor` for data columns and `display` for columns without one.
 const columnHelper = createColumnHelper<DataTableFeatures, Task>()
@@ -61,48 +64,48 @@ export const taskColumns = columnHelper.columns([
       );
     },
   }),
-columnHelper.accessor("priority", {
-  header: "Priority",
+  columnHelper.accessor("priority", {
+    header: "Priority",
 
-  cell: ({ row }) => {
-    const priority = row.getValue("priority") as string;
+    cell: ({ row }) => {
+      const priority = row.getValue("priority") as string;
 
-    const priorityConfig: Record<
-      string,
-      { text: string; dot: string }
-    > = {
-      CRITICAL: {
-        text: "text-red-600",
-        dot: "bg-red-600",
-      },
-      HIGH: {
-        text: "text-orange-500",
-        dot: "bg-orange-500",
-      },
-      LOW: {
-        text: "text-green-600",
-        dot: "bg-green-600",
-      },
-    };
+      const priorityConfig: Record<
+        string,
+        { text: string; dot: string }
+      > = {
+        CRITICAL: {
+          text: "text-red-600",
+          dot: "bg-red-600",
+        },
+        HIGH: {
+          text: "text-orange-500",
+          dot: "bg-orange-500",
+        },
+        LOW: {
+          text: "text-green-600",
+          dot: "bg-green-600",
+        },
+      };
 
-    const config = priorityConfig[priority] ?? {
-      text: "text-gray-600",
-      dot: "bg-gray-500",
-    };
+      const config = priorityConfig[priority] ?? {
+        text: "text-gray-600",
+        dot: "bg-gray-500",
+      };
 
-    return (
-      <div className={`flex items-center gap-2 ${config.text}`}>
-        <span
-          className={`h-2 w-2 rounded-full ${config.dot}`}
-        />
+      return (
+        <div className={`flex items-center gap-2 ${config.text}`}>
+          <span
+            className={`h-2 w-2 rounded-full ${config.dot}`}
+          />
 
-        <span className="font-medium">
-          {priority}
-        </span>
-      </div>
-    );
-  },
-}),
+          <span className="font-medium">
+            {priority}
+          </span>
+        </div>
+      );
+    },
+  }),
   columnHelper.accessor((row) => row.project?.projectName ?? "-", {
     id: "projectName",
     header: "Project",
@@ -121,4 +124,34 @@ columnHelper.accessor("priority", {
       return formatDateTime(date.toLocaleDateString())
     }
   }),
+  columnHelper.display({
+  id: "actions",
+  header: "Status Action",
+  cell: ({ row }) => {
+    const task = row.original;
+    const isCompleted = task.status === "COMPLETED";
+    const { mutate: updateTaskMutation } = useUpdateTaskStatusMutation()
+
+    return (
+      <Button
+        variant="outline"
+        size="sm"
+        disabled={isCompleted}
+        onClick={() => {
+          if(task?.id){
+            updateTaskMutation(task.id)
+          }
+        }}
+        className={
+          isCompleted
+            ? "text-green-600"
+            : "text-blue-600 cursor-pointer"
+        }
+      >
+        <CheckCircle className="mr-2 h-4 w-4" />
+        {isCompleted ? "Completed" : "Mark Complete"}
+      </Button>
+    );
+  },
+}),
 ])

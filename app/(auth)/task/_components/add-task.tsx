@@ -195,7 +195,7 @@ const AddTask = ({ modelOpen, modelClose, selectedTask, setSelectedTask }: AddTa
                         <SelectLabel>Projects</SelectLabel>
 
                         {ProjectNames?.map((item) => (
-                          <SelectItem key={item.projectName} value={item.id}>
+                          <SelectItem key={item.id} value={item.id}>
                             {item.projectName}
                           </SelectItem>
                         ))}

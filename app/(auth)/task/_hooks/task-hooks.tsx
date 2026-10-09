@@ -3,7 +3,7 @@ import api from "@/lib/axios";
 import { toast } from "react-hot-toast";
 import { Task, TaskPagination } from "@/types/task-types";
 
-export const useGetTask = ({ page, limit, search, status, priority }: { page: number; limit: number, search?: string, status?: string, priority?: string }) => {
+export const useGetTask = ({ page, limit, search="", status="", priority="" }: { page: number; limit: number, search?: string, status?: string, priority?: string }) => {
     return useQuery<TaskPagination>({
         queryKey: ['Tasks', page, limit, search, status, priority],
         queryFn: () => getAllTasks(page, limit, search, status, priority),
@@ -35,6 +35,17 @@ export const useUpdateTaskMutation = () => {
         onSuccess: () => {
             queryClient.invalidateQueries({ queryKey: ['Tasks'] });
             toast.success('Task updated successfully', { id: 'update-task-success' });
+        }
+    })
+};
+
+export const useUpdateTaskStatusMutation = () => {
+    const queryClient = useQueryClient();
+    return useMutation({
+        mutationFn: updateTaskStatus,
+        onSuccess: () => {
+            queryClient.invalidateQueries({ queryKey: ['Tasks'] });
+            toast.success('Status updated successfully', { id: 'update-status-success' });
         }
     })
 };
@@ -101,6 +112,17 @@ const updateTask = async (taskDate: Task): Promise<void> => {
     }catch(error) {
         console.error('Error updating task:', error);
         toast.error('Failed to update task', { id: 'update-task-error' });
+        throw error;
+    }
+};
+
+const updateTaskStatus = async (id: string): Promise<void> => {
+    try{
+        await api.put('/api/task/update-task-status', {id});
+        toast.success('Status updated successfully', { id: 'update-status-success' });
+    }catch(error) {
+        console.error('Error updating status:', error);
+        toast.error('Failed to update status', { id: 'update-status-error' });
         throw error;
     }
 };
