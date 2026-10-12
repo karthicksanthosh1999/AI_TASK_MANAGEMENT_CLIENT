@@ -13,7 +13,15 @@ import { Label } from "@/components/ui/label"
 import { Button } from "@/components/ui/button"
 import { Controller, useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod"
-import { Select, SelectContent, SelectGroup, SelectItem, SelectLabel, SelectTrigger, SelectValue } from "@/components/ui/select";
+import {
+  Select,
+  SelectContent,
+  SelectGroup,
+  SelectItem,
+  SelectLabel,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select"
 import { AddTaskForm, addTaskSchema } from "../_validation/task-validation"
 import { useCreateTaskMutation, useUpdateTaskMutation } from "../_hooks/task-hooks";
 import { useEffect } from "react";
@@ -93,7 +101,6 @@ const AddTask = ({ modelOpen, modelClose, selectedTask, setSelectedTask }: AddTa
     }, [selectedTask, modelOpen, reset, user]);
 
   const onSubmit = async (values: AddTaskForm) => {
-
     if(selectedTask && selectedTask.id){
       updateTaskMutation({ ...values, id: selectedTask.id, startDate: new Date(values.startDate), endDate: new Date(values.endDate), userId: user?.id ?? ""  });
     }else{
@@ -109,6 +116,12 @@ const AddTask = ({ modelOpen, modelClose, selectedTask, setSelectedTask }: AddTa
     modelClose()
     setSelectedTask(null);
   }
+
+
+  const projectLabels = ProjectNames && ProjectNames.map((item) => ({
+    label: item.projectName,
+    value: item.id
+  }))
 
   return (
     <Dialog 
@@ -187,16 +200,22 @@ const AddTask = ({ modelOpen, modelClose, selectedTask, setSelectedTask }: AddTa
                     <Label htmlFor="projectId">Project</Label>
 
                     <SelectTrigger className="w-full rounded-sm">
-                      <SelectValue placeholder="Select project" />
+                      <SelectValue placeholder="Select project">
+                        {
+                          projectLabels?.find(
+                            (item) => item.value === field.value
+                          )?.label
+                        }
+                      </SelectValue>
                     </SelectTrigger>
 
                     <SelectContent className="rounded-sm p-2">
                       <SelectGroup>
                         <SelectLabel>Projects</SelectLabel>
 
-                        {ProjectNames?.map((item) => (
-                          <SelectItem key={item.id} value={item.id}>
-                            {item.projectName}
+                        {projectLabels?.map((item) => (
+                          <SelectItem key={item.value} value={item.value}>
+                            {item.label}
                           </SelectItem>
                         ))}
                       </SelectGroup>

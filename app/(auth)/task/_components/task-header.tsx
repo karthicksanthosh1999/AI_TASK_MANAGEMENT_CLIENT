@@ -49,7 +49,7 @@ const TaskHeader = ({ title, buttonTitle, selectedTask, setSelectedTask, isOpen,
         <div className="flex items-center gap-2">
             <Input 
                 type="search" 
-                placeholder="Task Name..."
+                placeholder="Task title..."
                 value={search}
                 onChange={(event)=>setSearch(event.target.value)}
                 autoFocus={true}

@@ -7,10 +7,10 @@ import TaskPriority from './_component/task-priority';
 const DashboardPage = () => {
   return (
     <div>
-      <TasksStatus />
       <div>
         <TaskPriority/>
       </div>
+      <TasksStatus />
       <div className="h-15">
         <RecentTasks />
       </div>

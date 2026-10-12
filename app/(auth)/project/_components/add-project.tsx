@@ -164,6 +164,8 @@ const AddProject = ({ modelOpen, modelClose, selectedProject, setSelectedProject
                 )}
               </div>
 
+            {/* ================= PROJECT STATUS ================= */}
+
               <Controller
                 name="projectStatus"
                 control={control}

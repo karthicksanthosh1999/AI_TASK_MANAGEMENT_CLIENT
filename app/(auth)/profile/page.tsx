@@ -1,14 +1,13 @@
 "use client";
 
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import {
   Camera,
   Check,
   Edit3,
   Mail,
-  Phone,
   ShieldCheck,
-  User,
+  UserCircle,
   CalendarDays,
   Lock,
   Save,
@@ -27,35 +26,30 @@ import { Separator } from "@/components/ui/separator";
 import { Badge } from "@/components/ui/badge";
 import { useSession } from "@/providers/SessionProvider";
 import { formatDateTime } from "@/lib/dateFormater";
+import { useUpdateUserMutation } from "../users/_hooks/user-hooks";
+import { User } from "@/types/user-types";
 
-type UserFormData = {
-  firstName: string;
-  lastName: string;
-  email: string;
-  phone: string;
-  role: string;
-  department: string;
-  joinedDate: string;
-};
 
 function UserProfile() {
   const { user: loggedUser } = useSession();
 
-  const getInitialData = (): UserFormData => ({
+  const getInitialData = ():User => ({
     firstName: loggedUser?.name ?? "N/A",
     lastName: "N/A",
     email: loggedUser?.email ?? "N/A",
     phone: loggedUser?.mobileNo ?? "N/A",
-    role: loggedUser?.role ?? "N/A",
+    role: loggedUser?.role ?? "USER",
     department: "N/A",
     joinedDate: loggedUser?.createdAt
       ? formatDateTime(loggedUser.createdAt)
       : "N/A",
   });
 
+  const { mutate: userProfileUpdateMutation } = useUpdateUserMutation()
+
   const [isEditing, setIsEditing] = useState(false);
-  const [user, setUser] = useState<UserFormData>(getInitialData);
-  const [formData, setFormData] = useState<UserFormData>(getInitialData);
+  const [user, setUser] = useState<User>(getInitialData);
+  const [formData, setFormData] = useState<User>(getInitialData);
 
   useEffect(() => {
     if (!loggedUser) return;
@@ -67,7 +61,7 @@ function UserProfile() {
   }, [loggedUser]);
 
   const handleChange = (
-    field: keyof UserFormData,
+    field: keyof User,
     value: string
   ) => {
     setFormData((prev) => ({
@@ -88,17 +82,7 @@ function UserProfile() {
 
   const handleSave = async () => {
     try {
-      /*
-       * TODO:
-       * Call update profile API here
-       *
-       * await updateProfile({
-       *   name: formData.firstName,
-       *   email: formData.email,
-       *   mobileNo: formData.phone,
-       * })
-       */
-
+      userProfileUpdateMutation(formData)
       setUser(formData);
       setIsEditing(false);
     } catch (error) {
@@ -107,8 +91,8 @@ function UserProfile() {
   };
 
   const fullName =
-    user.firstName !== "N/A"
-      ? user.firstName
+    user.name !== "N/A"
+      ? user.name
       : "N/A";
 
   return (
@@ -170,7 +154,7 @@ function UserProfile() {
               {/* Avatar */}
               <div className="relative w-fit">
                 <div className="flex size-24 items-center justify-center rounded-full border-4 border-gray-400 bg-primary text-2xl font-bold text-gray-200 shadow-md">
-                  {user.firstName.charAt(0).toUpperCase()}
+                  {user?.name?.charAt(0).toUpperCase() ?? "N/A"}
                 </div>
 
                 {isEditing && (
@@ -227,22 +211,6 @@ function UserProfile() {
 
                 <div className="flex items-center gap-3">
                   <div className="flex size-9 shrink-0 items-center justify-center rounded-lg bg-muted">
-                    <Phone className="size-4 text-muted-foreground" />
-                  </div>
-
-                  <div className="min-w-0">
-                    <p className="text-xs text-muted-foreground">
-                      Phone
-                    </p>
-
-                    <p className="truncate text-sm font-medium">
-                      {user.phone}
-                    </p>
-                  </div>
-                </div>
-
-                <div className="flex items-center gap-3">
-                  <div className="flex size-9 shrink-0 items-center justify-center rounded-lg bg-muted">
                     <CalendarDays className="size-4 text-muted-foreground" />
                   </div>
 
@@ -252,7 +220,7 @@ function UserProfile() {
                     </p>
 
                     <p className="text-sm font-medium">
-                      {user.joinedDate}
+                      {user?.joinedDate ?? "N/A"}
                     </p>
                   </div>
                 </div>
@@ -269,7 +237,7 @@ function UserProfile() {
               <CardHeader>
                 <div className="flex items-center gap-3">
                   <div className="flex size-10 items-center justify-center rounded-lg bg-primary/10">
-                    <User className="size-5 text-primary" />
+                    <UserCircle className="size-5 text-primary" />
                   </div>
 
                   <div>
@@ -290,24 +258,24 @@ function UserProfile() {
                 <div className="grid gap-5 sm:grid-cols-2">
 
                   <div className="space-y-2">
-                    <Label htmlFor="firstName">
-                      First Name
+                    <Label htmlFor="name">
+                      Full Name
                     </Label>
 
                     {isEditing ? (
                       <Input
-                        id="firstName"
-                        value={formData.firstName}
+                        id="name"
+                        value={formData.name}
                         onChange={(e) =>
                           handleChange(
-                            "firstName",
+                            "name",
                             e.target.value
                           )
                         }
                       />
                     ) : (
                       <div className="flex h-10 items-center rounded-md border bg-muted/30 px-3 text-sm">
-                        {user.firstName}
+                        {user.name}
                       </div>
                     )}
                   </div>
@@ -348,30 +316,6 @@ function UserProfile() {
                       {user.role}
                     </div>
                   </div>
-
-                  <div className="space-y-2">
-                    <Label htmlFor="phone">
-                      Phone Number
-                    </Label>
-
-                    {isEditing ? (
-                      <Input
-                        id="phone"
-                        value={formData.phone}
-                        onChange={(e) =>
-                          handleChange(
-                            "phone",
-                            e.target.value
-                          )
-                        }
-                      />
-                    ) : (
-                      <div className="flex h-10 items-center rounded-md border bg-muted/30 px-3 text-sm">
-                        {user.phone}
-                      </div>
-                    )}
-                  </div>
-
                 </div>
               </CardContent>
             </Card>

@@ -27,3 +27,27 @@ export interface TaskPagination {
     hashPreviousPage: boolean,
   }
 }
+
+
+export type TaskUrgency = "HIGH" | "CRITICAL" | "LOW";
+
+export interface TaskRecommendation {
+  taskId: string;
+  title: string;
+  rank: number;
+  score: number;
+  urgency: TaskUrgency;
+  reason: string;
+}
+
+export interface TaskPriorityResult {
+  summary: string;
+  recommendations: TaskRecommendation[];
+}
+
+export interface TaskPriorityApiResponse {
+  success: boolean;
+  statusCode: number;
+  message: string;
+  data: TaskPriorityResult;
+}
