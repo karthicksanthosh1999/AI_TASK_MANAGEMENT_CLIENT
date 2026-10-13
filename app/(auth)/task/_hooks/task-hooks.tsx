@@ -1,7 +1,7 @@
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import api from "@/lib/axios";
 import { toast } from "react-hot-toast";
-import { Task, TaskPagination } from "@/types/task-types";
+import { APIResponseType, Task, TaskPagination, TaskStatusByCountType } from "@/types/task-types";
 
 export const useGetTask = ({ page, limit, search="", status="", priority="" }: { page: number; limit: number, search?: string, status?: string, priority?: string }) => {
     return useQuery<TaskPagination>({
@@ -16,6 +16,13 @@ export const useGetAllTask = () => {
         queryFn: () => fetchAllTasks(),
     })
 };
+
+export const useGetTaskStatusByCount = () => {
+    return useQuery<TaskStatusByCountType>({
+        queryKey: ['Tasks'],
+        queryFn: () => getTaskStatusCount()
+    })
+}; 
 
 export const useCreateTaskMutation = () => {
     const queryClient = useQueryClient();
@@ -126,3 +133,12 @@ const updateTaskStatus = async (id: string): Promise<void> => {
         throw error;
     }
 };
+
+const getTaskStatusCount = async(): Promise<TaskStatusByCountType> => {
+    try {
+        const {data}= await api.get<APIResponseType<TaskStatusByCountType>>(`/api/task/pie-chart/status-count`);
+        return data?.data ?? []
+    } catch (error) {
+        console.log(error)
+    }
+}

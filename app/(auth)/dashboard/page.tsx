@@ -1,16 +1,15 @@
-import React from 'react'
-
 import RecentTasks from './_component/recent-tasks';
 import TasksStatus from './_component/tasks-status';
-import TaskPriority from './_component/task-priority';
+import PieChart from './_component/pie-chart';
 
 const DashboardPage = () => {
   return (
-    <div>
-      <div>
-        <TaskPriority/>
-      </div>
+    <div className="space-y-2">
       <TasksStatus />
+      <div>
+        {/* <TaskPriority/> */}
+        <PieChart />
+      </div>
       <div className="h-15">
         <RecentTasks />
       </div>

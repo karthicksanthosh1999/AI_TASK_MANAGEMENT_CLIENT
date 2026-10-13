@@ -45,9 +45,23 @@ export interface TaskPriorityResult {
   recommendations: TaskRecommendation[];
 }
 
-export interface TaskPriorityApiResponse {
+export interface TaskPriorityApiResponse  {
   success: boolean;
   statusCode: number;
   message: string;
   data: TaskPriorityResult;
+}
+
+export interface APIResponseType<T> {
+  success: boolean,
+  statusCode: number;
+  message: string;
+  data: T
+}
+
+export interface TaskStatusByCountType {
+    ALL?: number;
+    PLANNED: number;
+    IN_PROGRESS: number;
+    COMPLETED: number;
 }

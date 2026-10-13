@@ -4,6 +4,7 @@ import { Input } from '@/components/ui/input';
 import { useCallback } from 'react';
 import { Task } from '@/types/task-types';
 import AddTask from './add-task';
+import { Select, SelectContent, SelectGroup, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 
 interface TaskHeaderProps {
     title: string;
@@ -14,14 +15,36 @@ interface TaskHeaderProps {
     setIsOpen: (open: boolean) => void,
     search: string,
     setSearch: (search: string) => void,
+    status: string,
+    setStatus: (status: string) => void,
     count?: { PLANNED: number; IN_PROGRESS: number; COMPLETED: number }
 }
 
-const TaskHeader = ({ title, buttonTitle, selectedTask, setSelectedTask, isOpen, setIsOpen, count, search, setSearch }: TaskHeaderProps) => {
+const TaskHeader = ({ title, buttonTitle, selectedTask, setSelectedTask, isOpen, setIsOpen, count, search, setSearch, status, setStatus }: TaskHeaderProps) => {
 
     const handleOpen = useCallback(() => {
         setIsOpen(true);
     },[setIsOpen]);
+
+    const taskStatus = [
+        {
+            label: "All",
+            value: ""
+        },
+        {
+            label: "COMPLETED",
+            value: "COMPLETED"
+        },
+        {
+            label: "IN_PROGRESS",
+            value: "IN_PROGRESS"
+        },
+        {
+            label: "PLANNED",
+            value: "PLANNED"
+        },
+
+    ]
 
   return (
     <div className="flex items-center justify-between mt-2 border rounded-md p-2 bg-card">
@@ -47,6 +70,24 @@ const TaskHeader = ({ title, buttonTitle, selectedTask, setSelectedTask, isOpen,
                 }
             </div>
         <div className="flex items-center gap-2">
+            <Select 
+              items={taskStatus}
+              value={status}
+              onValueChange={(value) => setStatus(String(value))}
+              >
+            <SelectTrigger className="w-[180px] rounded-xs cursor-pointer">
+                <SelectValue placeholder="STATUS" />
+            </SelectTrigger>
+            <SelectContent>
+                <SelectGroup>
+                {taskStatus.map((item) => (
+                    <SelectItem key={item.value} value={item.value}>
+                    {item.label}
+                    </SelectItem>
+                ))}
+                </SelectGroup>
+            </SelectContent>
+            </Select>
             <Input 
                 type="search" 
                 placeholder="Task title..."

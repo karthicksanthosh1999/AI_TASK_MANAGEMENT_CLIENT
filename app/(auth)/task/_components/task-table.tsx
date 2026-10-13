@@ -14,6 +14,7 @@ import {
 const TaskTable = () => {
   const [search, setSearch] = useState("");
 
+  const [status, setStatus] = useState<string>("")
   const debounceSearch = useDebounce(search, 500);
 
   const [pagination, setPagination] = useState({
@@ -27,7 +28,7 @@ const TaskTable = () => {
     page: pagination.page,
     limit: pagination.limit,
     search: debounceSearch ?? "",
-    status: pagination.status,
+    status: status,
     priority: pagination.priority,
   });
 
@@ -74,6 +75,8 @@ const TaskTable = () => {
         }
         search={search}
         setSearch={setSearch}
+        status={status}
+        setStatus={setStatus}
       />
 
       <DataTable
