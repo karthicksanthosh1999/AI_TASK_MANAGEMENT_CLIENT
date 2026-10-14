@@ -28,30 +28,6 @@ export interface TaskPagination {
   }
 }
 
-
-export type TaskUrgency = "HIGH" | "CRITICAL" | "LOW";
-
-export interface TaskRecommendation {
-  taskId: string;
-  title: string;
-  rank: number;
-  score: number;
-  urgency: TaskUrgency;
-  reason: string;
-}
-
-export interface TaskPriorityResult {
-  summary: string;
-  recommendations: TaskRecommendation[];
-}
-
-export interface TaskPriorityApiResponse  {
-  success: boolean;
-  statusCode: number;
-  message: string;
-  data: TaskPriorityResult;
-}
-
 export interface APIResponseType<T> {
   success: boolean,
   statusCode: number;
@@ -64,4 +40,9 @@ export interface TaskStatusByCountType {
     PLANNED: number;
     IN_PROGRESS: number;
     COMPLETED: number;
+}
+export enum TaskStatusType {
+    PLANNED ="PLANNED",
+    IN_PROGRESS ="IN_PROGRESS",
+    COMPLETED ="COMPLETED",
 }

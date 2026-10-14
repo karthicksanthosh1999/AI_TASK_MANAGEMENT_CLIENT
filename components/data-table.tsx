@@ -149,7 +149,7 @@ export function DataTable<TData extends RowData>({
                           className="cursor-pointer rounded-xs"
                           onClick={() => {
                             setDeleteModelOpen(true);
-                            setSelectedItemId(row.original?.id);
+                              setSelectedItemId(row.original?.id);
                           }}
                         >
                           Delete

@@ -1,7 +1,7 @@
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import api from "@/lib/axios";
 import { toast } from "react-hot-toast";
-import { APIResponseType, Task, TaskPagination, TaskStatusByCountType } from "@/types/task-types";
+import { APIResponseType, Task, TaskPagination, TaskStatusByCountType, TaskStatusType } from "@/types/task-types";
 
 export const useGetTask = ({ page, limit, search="", status="", priority="" }: { page: number; limit: number, search?: string, status?: string, priority?: string }) => {
     return useQuery<TaskPagination>({
@@ -23,6 +23,16 @@ export const useGetTaskStatusByCount = () => {
         queryFn: () => getTaskStatusCount()
     })
 }; 
+
+export const useTaskByStatusMutation = () => {
+    const queryClient = useQueryClient();
+    return useMutation({
+        mutationFn: fetchTasksByStatus,
+        onSuccess: () => {
+            queryClient.invalidateQueries({ queryKey: ['Tasks'] })
+        }
+    })
+};
 
 export const useCreateTaskMutation = () => {
     const queryClient = useQueryClient();
@@ -141,4 +151,14 @@ const getTaskStatusCount = async(): Promise<TaskStatusByCountType> => {
     } catch (error) {
         console.log(error)
     }
-}
+};
+
+const fetchTasksByStatus = async (status: TaskStatusType): Promise<Task[]> => {
+    try{
+        const response = await api.post('/api/task/due-data/status', {status});
+        return response.data?.data;
+    }catch(error) {
+        console.error('Error creating task:', error);
+        throw error;
+    }
+};
