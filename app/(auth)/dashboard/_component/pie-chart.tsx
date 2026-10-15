@@ -39,7 +39,7 @@ const PieChart = () => {
   }));
 
   return (
-    <Card className="rounded-xl border shadow-sm md:w-[25%] w-full">
+    <Card className="rounded-xs border shadow-sm md:w-[25%] w-full">
       <CardHeader className="text-lg font-semibold">
         Task Status Overview
       <CardDescription className="text-xs">Total Tasks: {tasks.ALL}</CardDescription>

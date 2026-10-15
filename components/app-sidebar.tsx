@@ -10,7 +10,7 @@ import {
   SidebarHeader,
   SidebarRail,
 } from "@/components/ui/sidebar"
-import { GalleryVerticalEndIcon, BookOpen, SquareTerminal, Bot, User, UsersRound } from "lucide-react"
+import { BookOpen, SquareTerminal, Bot, User, UsersRound } from "lucide-react"
 import { NavMain } from "./nav-main";
 import { usePathname } from "next/navigation";
 
@@ -42,16 +42,6 @@ const data = {
       icon: User,
     },
   ],
-  teams: [
-    {
-      name: "Task Manager",
-      logo: (
-        <GalleryVerticalEndIcon
-        />
-      ),
-      plan: "Enterprise",
-    }
-  ]
 }
 
 export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
@@ -63,7 +53,7 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
   return (
     <Sidebar collapsible="icon" {...props}>
       <SidebarHeader>
-        <TeamSwitcher teams={data.teams} />
+        <TeamSwitcher/>
       </SidebarHeader>
       <SidebarContent>
         <NavMain items={navItems} />

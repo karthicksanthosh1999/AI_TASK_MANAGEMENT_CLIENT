@@ -23,17 +23,17 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
       className={`${poppins.variable} h-full antialiased`}
     >
       <body className="min-h-full flex flex-col">
-       <AuthProvider>
-          <ThemeProvider
-            attribute="class"
-            defaultTheme="system"
-            enableSystem
-            disableTransitionOnChange
-            >
-            {children}
-            <Toaster position="top-right" />
-          </ThemeProvider>    
-        </AuthProvider>
+          <AuthProvider>
+            <ThemeProvider
+              attribute="class"
+              defaultTheme="system"
+              enableSystem
+              disableTransitionOnChange
+              >
+              {children}
+              <Toaster position="top-right" />
+            </ThemeProvider>    
+            </AuthProvider>
         </body>
     </html>
   );

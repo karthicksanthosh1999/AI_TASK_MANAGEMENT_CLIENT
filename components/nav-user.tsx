@@ -21,8 +21,7 @@ import {
   useSidebar,
 } from "@/components/ui/sidebar"
 import { useSession } from "@/providers/SessionProvider";
-import { ChevronsUpDownIcon, LogOutIcon } from "lucide-react"
-import Link from "next/link";
+import { ChevronsUpDownIcon, LogOutIcon } from "lucide-react";
 
 export function NavUser() {
   const { isMobile } = useSidebar()
